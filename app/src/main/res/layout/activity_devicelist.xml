@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1" >
+
+    <!--    <LinearLayout
+           android:id="@+id/linearLayout1"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content" >
+
+           <Button
+               android:id="@+id/btnSearch"
+               android:layout_width="100dp"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:text="搜索" />
+
+           <Button
+               android:id="@+id/button1"
+               android:layout_width="100dp"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:text="自检序列号" />
+
+       </LinearLayout> -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView1"
+            android:layout_alignBottom="@+id/textView1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp"
+            android:text=""
+            android:textColor="#00EE00"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/back_btList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="serif"
+            android:id="@+id/textView1"
+            android:gravity="center|start"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Select Bluetooth Printer"
+            android:textColor="#F5F5F5"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/relativeLayout"
+        >
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:fastScrollEnabled="false"
+            >
+        </ListView>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,881 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainlay"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/pole1"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:scrollbars="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:background="@drawable/my_custom_background"
+        android:orientation="vertical"
+        android:padding="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:weightSum="2">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:text="Act_No:"
+                android:textColor="#F5F5F5"
+                android:textSize="20sp"
+                android:textStyle="bold">
+            </TextView>
+            <TextView
+                android:id="@+id/txtaccountno"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.25"
+                android:text="123456789"
+                android:textColor="#FFA4A4"
+                android:textSize="18sp"
+                android:textStyle="bold">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:weightSum="2">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:text="CName:"
+                android:textColor="#F5F5F5"
+                android:textSize="20sp"
+                android:textStyle="bold">
+            </TextView>
+            <TextView
+                android:id="@+id/txtcname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.25"
+                android:text="Chandan"
+                android:textColor="#FFA4A4"
+                android:textSize="18sp"
+                android:textStyle="bold">
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="(  Survey Details : )"
+        android:textColor="#000000"
+        android:textSize="23sp"
+        android:textStyle="bold">
+    </TextView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether Consumer is Temporary Disconnected (TD) in Billing System"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rgTd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/tdyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/tdno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+
+                    <Spinner
+                        android:id="@+id/sp_td"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_custom_back_list"
+                        android:entries="@array/td_array"
+                        android:padding="10dp"
+                        android:requiresFadingEdge="horizontal"
+                        android:textAlignment="center"
+                        android:visibility="gone"></Spinner>
+
+                    <LinearLayout
+                        android:id="@+id/laynewconid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="New Consumer No:"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_td_consumer_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="New Consumer No"
+                            android:inputType="text|number"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laynewmeterno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Meter No:"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_td_meter_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Meter No"
+                            android:inputType="text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laydconid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="Actual Consumer No:"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_td_duplicate_con_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Actual Consumer No"
+                            android:inputType="number|text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether Low consumption(0-10) units Found"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rglow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/rblowyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/rblowno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+
+                    <Spinner
+                        android:id="@+id/sp_low_consumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_custom_back_list"
+                        android:entries="@array/low_consumption_array"
+                        android:padding="10dp"
+                        android:requiresFadingEdge="horizontal"
+                        android:textAlignment="center"
+                        android:visibility="gone"></Spinner>
+
+                    <LinearLayout
+                        android:id="@+id/laymtrreding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="Meter Reading(KWH):"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_low_mtr_read"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Meter Reading"
+                            android:inputType="number|text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laymeterimg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/my_custom_back_edt"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <ImageView
+                            android:id="@+id/mtr_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:adjustViewBounds="true"
+                            android:background="@mipmap/ic_survey_img"
+                            android:scaleType="fitXY"
+                            android:tooltipText="Meter Image"></ImageView>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether Meter Defective(MD) Found in Billing System"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rgMd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/mdyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/mdno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+
+                    <Spinner
+                        android:id="@+id/sp_Meter_Defactive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_custom_back_list"
+                        android:entries="@array/Meter_defactive_array"
+                        android:padding="10dp"
+                        android:requiresFadingEdge="horizontal"
+                        android:textAlignment="center"
+                        android:visibility="gone"></Spinner>
+
+                    <LinearLayout
+                        android:id="@+id/laymeterread"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.50"
+                            android:text="Actual Meter Reading(KWH):"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_md_met_read"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".50"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Meter Reading"
+                            android:inputType="number|text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laymeternomatched"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="A Meter No. matched with Electricity Bill"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <RadioGroup
+                            android:id="@+id/rgmetermatched"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <RadioButton
+                                android:id="@+id/metermatchedyes"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="YES"></RadioButton>
+
+                            <RadioButton
+                                android:id="@+id/metermatchedno"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="NO"></RadioButton>
+                        </RadioGroup>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laynewmtrno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="New Meter No:"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_md_met_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter New Meter No"
+                            android:inputType="text"
+                            android:padding="8dp"
+                            android:singleLine="true">
+
+                        </EditText>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether the Consumer is “Unpaid Consumer” from April 21"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rgisconunpaid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/unpaidyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/unpaidno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:id="@+id/laymob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Mobile No :"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_unpaid_mobile_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Mobile No."
+                            android:inputType="number|phone"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laytraced"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Traced Consumer or Not"
+                            android:textColor="#F5F5F5"
+                            android:textSize="20sp"></TextView>
+
+                        <RadioGroup
+                            android:id="@+id/rgtraced"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <RadioButton
+                                android:id="@+id/tracedyes"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="YES"></RadioButton>
+
+                            <RadioButton
+                                android:id="@+id/tracedno"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="NO"></RadioButton>
+                        </RadioGroup>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether Consumer is in Proper MRU"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rgpropermru1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/prpmruyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="false"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/propmruno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Whether consumer is missing in MRU"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <RadioGroup
+                        android:id="@+id/rgmissingmru"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/missingyes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="false"
+                            android:text="YES"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/missingno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="NO"></RadioButton>
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:id="@+id/laycano"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="CA No :"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_proper_mru_cano"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Consumer No."
+                            android:inputType="number|text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laymetrno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="Meter No :"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_proper_met_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Meter No."
+                            android:inputType="text"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/my_custom_background"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Fill Power Factor And Max Deemand"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/laymax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="Max Deemand :"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_maxdeemand"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Max Deemand."
+                            android:inputType="numberDecimal"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/laypowerfactor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.20"
+                            android:text="Power Factor :"
+                            android:textColor="#F5F5F5"
+                            android:textSize="18sp"></TextView>
+
+                        <EditText
+                            android:id="@+id/edt_powerfactor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".80"
+                            android:background="@drawable/my_custom_back_edt"
+                            android:hint="Enter Power Factor."
+                            android:inputType="numberDecimal"
+                            android:padding="8dp"
+                            android:singleLine="true"></EditText>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_continue"
+                style="?android:textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/back12"
+                android:text="Submit"
+                android:textColor="#ffffffff"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

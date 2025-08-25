@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#4AC0F2"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/dialogtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Please Select Printer"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/printerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <RadioButton
+                android:id="@+id/Epson"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.8"
+                android:background="#FEC200"
+                android:checked="true"
+                android:padding="7dp"
+                android:text="   Epson Printer   "
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/Analogics"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1.2"
+                android:background="#FEC200"
+                android:checked="false"
+                android:padding="5dp"
+                android:text="  Analogics Printer  "
+                android:textAlignment="center" />
+            <RadioButton
+                android:id="@+id/bixolon"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1.2"
+                android:background="#FEC200"
+                android:checked="false"
+                android:visibility="gone"
+                android:padding="5dp"
+                android:text="  Bixolon Printer  "
+                android:textAlignment="center" />
+            <RadioButton
+                android:id="@+id/tvs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1.2"
+                android:background="#FEC200"
+                android:checked="false"
+                android:padding="5dp"
+                android:text="  TVS Printer  "
+                android:textAlignment="center" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bttonlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#84002F"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btn_OK"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.80"
+            android:gravity="center"
+            android:text=" Ok " />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.20"
+            android:gravity="center"
+            android:text=" Cancel " />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,1567 @@
+package com.nic.app.biharelectricitybilling.ui;
+
+import android.Manifest;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.SQLException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.text.Html;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import androidx.core.content.FileProvider;
+
+import com.nic.app.biharelectricitybilling.R;
+import com.nic.app.biharelectricitybilling.db.DataBaseHelper;
+import com.nic.app.biharelectricitybilling.db.WebServiceHelper;
+import com.nic.app.biharelectricitybilling.entity.ConsumerAdapter;
+import com.nic.app.biharelectricitybilling.entity.GPSTracker;
+import com.nic.app.biharelectricitybilling.entity.MRUDetails;
+import com.nic.app.biharelectricitybilling.entity.UserDetails;
+import com.nic.app.biharelectricitybilling.util.CommonPref;
+import com.nic.app.biharelectricitybilling.util.MarshmallowPermission;
+import com.nic.app.biharelectricitybilling.util.Utiilties;
+import com.nic.app.biharelectricitybilling.util.imageutils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
+public class ConsumerActivity4A11 extends Activity {
+    private static final int CAMERA_PIC = 100;
+    Button btnContinue;
+    private static final int CAMERA_REQUEST = 1777;
+    String fullImage = "image.jpg";
+    final int PIC_CROP = 2;
+    DataBaseHelper localDBHelper;
+    ArrayList<MRUDetails> mruList;
+    ScrollView scrollView;
+    String fname;
+    String reason = "";
+    MarshmallowPermission MARSHMALLOW_PERMISSION = null;
+    int count = 0;
+    ConsumerAdapter adapter;
+    String Unmeter = "";
+    TextView tvAcNo, tvConNo, tvMeterNo, tvConName, tvAddress, tvCategory,
+            tvLoad;
+    EditText etMobileNo, etDTNo, etMeterNo;
+    ListView dataList;
+    LinearLayout lin_listview, lin_meterNo, IsmeterCorrect, isbillinglayout;
+    String stringMobileNo = "0", Previous_read, stringDtNo, read_stats, stringRecDemd, maxdemand = "", powerfactor = "", stringPowFact;
+    GPSTracker gps;
+    // String Aplflag="N";
+    String isadddressupdated = "N";
+    RadioGroup radioGroup, radioGroupbilling;
+    String category = "", Load = "", Meter_no = "", Phase = "", AREA_CODE = "", Sec_div_code = "", DIV_CODE = "", Prv_read_Date = "", REC_DEEMAND = "", POWER_FACTOR = "";
+    RadioButton radioBtnYes, radioBtnNo, radioBtnYesbilling, radioBtnNobilling;
+    Spinner spreason;
+    Boolean isMeterNoCorrect, isbilling = true;
+    File myDir = null;
+    String[] paramarray;
+    /*private static String IMAGE_FILE_PATH;*/
+    private static String CROP_IMAGE_FILE_PATH;
+    private static String IMAGE_NAME;
+    ArrayList<String> reqread = new ArrayList<String>();
+    Bundle bundle = null;
+    private static String CROP_IMAGE_FILE_PATH1;
+    String Ocr = "N";
+    File photoFile;
+    public final String APP_TAG = "MyBillingApp";
+    public String photoFileName = "";
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        setContentView(R.layout.activity_consumer);
+        // Database Opening
+        localDBHelper = new DataBaseHelper(ConsumerActivity4A11.this);
+        localDBHelper = new DataBaseHelper(this);
+        try {
+            localDBHelper.createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+        try {
+            localDBHelper.openDataBase();
+        } catch (SQLException sqle) {
+            throw sqle;
+        }
+        // -------------------------------------------------------------------------------------
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.back12));
+        // actionBar.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.back12, null));
+        // For displaying title and subtitle and change text color
+        actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Consumer Details </font>"));
+        String pos = getIntent().getStringExtra("POS");
+        String value = getIntent().getStringExtra("VALUE");
+        initialization();
+       // Toast.makeText(this, ""+this, Toast.LENGTH_LONG).show();
+        isMeterNoCorrect = true;
+        mruList = localDBHelper.getMRU2(pos, value);
+        if (mruList.isEmpty() || mruList.size() <= 0) {
+            scrollView.setVisibility(View.GONE);
+            AlertDialogForNoResultFound();
+
+        } else if (mruList.size() == 1) {
+            valueInitialization();
+        } else if (mruList.size() > 1) {
+            loadMruList();
+        }
+
+        CROP_IMAGE_FILE_PATH = "/BEB/FullImage/"
+                + CommonPref.getUserDetails(getApplicationContext())
+                .get_MRUNo() + "/";
+        CROP_IMAGE_FILE_PATH1 = "/BEB/CropImage/"
+                + CommonPref.getUserDetails(getApplicationContext())
+                .get_MRUNo() + "/";
+        photoFileName = tvConNo.getText().toString().trim() + ".jpg";
+    }
+
+    private void valueInitialization() {
+        // TODO Auto-generated method stub
+        for (MRUDetails mru : mruList) {
+            scrollView.setVisibility(View.VISIBLE);
+            lin_listview.setVisibility(View.GONE);
+            tvAcNo.setText(mru.get_ACT_NO());
+            tvConNo.setText(mru.get_CON_ID());
+            mru.get_CATEGORY();
+            tvConName.setText(mru.get_CNAME());
+            tvAddress.setText(mru.get_Cfathername());
+            tvCategory.setText(mru.get_CATEGORY());
+      /*      if(mru.get_APL_CONSUMER().equalsIgnoreCase("Y") && mru.get_APL_BILLING_FLAG().equalsIgnoreCase("N")){
+                Aplflag="Y";
+            }*/
+            if (mru.get_Is_address_updated().equalsIgnoreCase("Y")) {
+                isadddressupdated = "Y";
+            } else {
+                isadddressupdated = "N";
+            }
+            tvLoad.setText(mru.get_LOAD());
+            Unmeter = mru.get_METR_UNMETER();
+            if (Unmeter.equals("UM")) {
+                IsmeterCorrect.setVisibility(View.GONE);
+                tvMeterNo.setText("UnMeter");
+            } else {
+                IsmeterCorrect.setVisibility(View.VISIBLE);
+                tvMeterNo.setText(mru.get_METER_NO());
+
+            }
+            etMobileNo.setText(mru.get_CONTACT_NUM().trim());
+            etDTNo.setText(mru.get_DT_NO().trim());
+            stringMobileNo = mru.get_CONTACT_NUM().trim();
+            category = mru.get_CATEGORY().trim();
+            stringDtNo = mru.get_DT_NO().trim();
+            IMAGE_NAME = mru.get_CON_ID() + ".jpg";
+            stringPowFact = mru.get_POW_FACT();
+            stringRecDemd = mru.get_REC_DEM();
+            Previous_read = mru.get_PREVIOUS_READ().trim();
+            Load = mru.get_LOAD();
+            Meter_no = mru.get_METER_NO();
+            Prv_read_Date = mru.get_LAST_BILL_DATE();
+            Phase = mru.get_PHASE();
+         /*   REC_DEEMAND=mru.get_REC_DEM();
+            POWER_FACTOR=mru.get_Power_Factor();*/
+            //   AREA_CODE=CommonPref.getUserDetails(ConsumerActivity.this).get_MRUNo();
+            Sec_div_code = mru.get_SECTION_ID().toString();
+            DIV_CODE = Sec_div_code.toString().substring(0, 3);
+            if (DIV_CODE.equals("226") || DIV_CODE.equals("227") || DIV_CODE.equals("244")) {
+                Ocr = "Y";
+            } else if ((mru.get_CATEGORY().trim().toString().equals("LTIS1D") || mru.get_CATEGORY().trim().toString().equals("LTIS2D")) && mru.get_CON_ID().startsWith("2")) {
+                Ocr = "Y";
+            } else {
+                Ocr = "N";
+            }
+            if (mru.get_CATEGORY().trim().toString().equals("LTIS1D") || mru.get_CATEGORY().trim().toString().equals("LTIS2D") || mru.get_CATEGORY().trim().toString().equals("PWWD")) {
+                read_stats = "KVAH";
+                //   reqReadings[0]=read_stats;
+                reqread.add(read_stats);
+            } else {
+                read_stats = "KWH";
+                //  reqReadings[0]=read_stats;
+                reqread.add(read_stats);
+            }
+            if (stringRecDemd.trim().equals("I")) {
+                maxdemand = "";
+            } else {
+                maxdemand = "Max_Demand";
+                //  reqReadings[2]=maxdemand;
+                reqread.add(maxdemand);
+            }
+            if (stringPowFact.trim().equals("I")) {
+                powerfactor = "";
+            } else {
+                powerfactor = "Power_Factor";
+                // reqReadings[1]=powerfactor;
+                reqread.add(powerfactor);
+            }
+            paramarray = new String[reqread.size()];
+            bundle = new Bundle();
+
+        }
+        spreason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                if (arg2 == 0) {
+                    reason = "0";
+                } else {
+                    reason = getResources().getStringArray(R.array.reason)[arg2].trim();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+    }
+
+    private void initialization() {
+        // TODO Auto-generated method stub
+        tvAcNo =  findViewById(R.id.tv_ac_no);
+        tvConNo =  findViewById(R.id.tv_con_no);
+        tvMeterNo =  findViewById(R.id.tv_meter_no);
+        tvConName =  findViewById(R.id.tv_con_name);
+        tvAddress =  findViewById(R.id.tv_address);
+        tvCategory =  findViewById(R.id.tv_category);
+        tvLoad =  findViewById(R.id.tv_load);
+        etMobileNo =  findViewById(R.id.et_mobileNo);
+        etDTNo =  findViewById(R.id.et_dtNo);
+        etMeterNo =  findViewById(R.id.et_meterNo);
+        scrollView =  findViewById(R.id.scrollview);
+        btnContinue =  findViewById(R.id.btn_continue);
+        radioGroup =  findViewById(R.id.radio_group_meter);
+        radioBtnYes =  findViewById(R.id.yes);
+        radioBtnNo =  findViewById(R.id.no);
+        IsmeterCorrect =  findViewById(R.id.ismetercorrect);
+        spreason =  findViewById(R.id.et_meterNo_billing);
+        radioGroupbilling =  findViewById(R.id.radio_group_billing);
+        radioBtnYesbilling =  findViewById(R.id.yes_billing);
+        radioBtnNobilling =  findViewById(R.id.no_billing);
+        isbillinglayout =  findViewById(R.id.lin_new_billing);
+        dataList =  findViewById(R.id.listConsumer);
+        lin_listview =  findViewById(R.id.lin_listview);
+        lin_meterNo =  findViewById(R.id.lin_new_meter);
+        btnContinue.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            if (isbilling) {
+                if (category.equalsIgnoreCase("KJ")) {
+                    if (Unmeter.equals("UM")) {
+                        long a = localDBHelper.saveMeterNo("N", "", tvAcNo.getText().toString());
+                        if (a > 0) {
+
+                            if (!(etMobileNo.getText().toString().equals(stringMobileNo)) || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                // This line will call due to some changes in editbox
+                                if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                    long c = localDBHelper.updateMru(etMobileNo.getText().toString(), etDTNo.getText().toString(), tvAcNo.getText().toString(), "Y","","");
+                                    if (c > 0) {
+                                        localDBHelper.insertmobiledtnumber(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString());
+                                        Toast.makeText(getApplicationContext(), "Update in Local DataBase", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error in Local Database",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    getgps();
+                                } else {
+                                    // Online Code
+                                    new updateDtNo().execute(etMobileNo.getText()
+                                                    .toString(), etDTNo.getText().toString(),
+                                            tvAcNo.getText().toString());
+                                }
+                            } else {
+                                getgps();
+
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    } else if (Unmeter.equals("MS")) {
+                        if (isMeterNoCorrect) {
+
+                            long a = localDBHelper.saveMeterNo("N", "", tvAcNo.getText().toString());
+
+                            if (a > 0) {
+
+                                if (!(etMobileNo.getText().toString().equals(stringMobileNo))
+                                        || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                    // This line will call due to some changes in editbox
+                                    if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                        // Offline code
+                                        long c = localDBHelper.updateMru(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString(), "Y","","");
+                                        if (c > 0) {
+                                            localDBHelper.insertmobiledtnumber(etMobileNo.getText()
+                                                            .toString(), etDTNo.getText().toString(),
+                                                    tvAcNo.getText().toString());
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Update in Local DataBase",
+                                                    Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Error in Local Database",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+
+                                        if (Ocr.equalsIgnoreCase("Y")) {
+                                            callCameraIntentforimage();
+                                        } else {
+                                            callCameraIntent();
+                                        }
+                                    } else {
+                                        // Online Code
+                                        new updateDtNo().execute(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString());
+                                    }
+                                } else {
+
+                                    if (Ocr.equalsIgnoreCase("Y")) {
+                                        callCameraIntentforimage();
+                                    } else {
+                                        callCameraIntent();
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            if (!etMeterNo.getText().toString().trim().isEmpty()) {
+
+                                long a = localDBHelper.saveMeterNo("Y", etMeterNo.getText().toString().trim(), tvAcNo.getText().toString());
+                                if (a > 0) {
+
+                                    if (!(etMobileNo.getText().toString().equals(stringMobileNo))
+                                            || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                        // This line will call due to some changes in editbox
+                                        if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                            // Offline code
+                                            long c = localDBHelper.updateMru(etMobileNo.getText()
+                                                            .toString(), etDTNo.getText().toString(),
+                                                    tvAcNo.getText().toString(), "Y","","");
+                                            if (c > 0) {
+                                                localDBHelper.insertmobiledtnumber(etMobileNo.getText()
+                                                                .toString(), etDTNo.getText().toString(),
+                                                        tvAcNo.getText().toString());
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Update in Local DataBase",
+                                                        Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Error in Local Database", Toast.LENGTH_LONG).show();
+                                            }
+                                            if (Ocr.equalsIgnoreCase("Y")) {
+                                                callCameraIntentforimage();
+                                            } else {
+                                                callCameraIntent();
+                                            }
+                                        } else {
+                                            // Online Code
+                                            new updateDtNo().execute(etMobileNo.getText().toString(), etDTNo.getText().toString(), tvAcNo.getText().toString());
+                                        }
+                                    } else {
+
+                                        if (Ocr.equalsIgnoreCase("Y")) {
+                                            callCameraIntentforimage();
+                                        } else {
+                                            callCameraIntent();
+                                        }
+                                    }
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                            Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Kindly Enter Valid Meter Number",
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                    }
+
+                } else if (!isvalidmobileno(etMobileNo.getText().toString())) {
+                    Toast.makeText(ConsumerActivity4A11.this, "Enter Valid Mobile Number", Toast.LENGTH_SHORT).show();
+                } else if ((localDBHelper.getmobileno(etMobileNo.getText().toString()) > 3)) {
+                    Toast.makeText(ConsumerActivity4A11.this, "You Have Entered This Number More Than 3 Times", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (Unmeter.equals("UM")) {
+                        long a = localDBHelper.saveMeterNo("N", "", tvAcNo.getText().toString());
+                        if (a > 0) {
+
+                            if (!(etMobileNo.getText().toString().equals(stringMobileNo)) || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                // This line will call due to some changes in editbox
+                                if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                    // Offline code
+                                    long c = localDBHelper.updateMru(etMobileNo.getText()
+                                                    .toString(), etDTNo.getText().toString(),
+                                            tvAcNo.getText().toString(), "Y","","");
+                                    if (c > 0) {
+                                        localDBHelper.insertmobiledtnumber(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString());
+                                        Toast.makeText(getApplicationContext(),
+                                                "Update in Local DataBase",
+                                                Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Error in Local Database",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    getgps();
+                                } else {
+                                    // Online Code
+                                    new updateDtNo().execute(etMobileNo.getText()
+                                                    .toString(), etDTNo.getText().toString(),
+                                            tvAcNo.getText().toString());
+                                }
+                            } else {
+                                getgps();
+
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    } else if (Unmeter.equals("MS")) {
+                        if (isMeterNoCorrect) {
+                            long a = localDBHelper.saveMeterNo("N", "", tvAcNo.getText().toString());
+                            if (a > 0) {
+                                if (!(etMobileNo.getText().toString().equals(stringMobileNo))
+                                        || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                    // This line will call due to some changes in editbox
+                                    if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                        // Offline code
+                                        long c = localDBHelper.updateMru(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString(), "Y","","");
+                                        if (c > 0) {
+                                            localDBHelper.insertmobiledtnumber(etMobileNo.getText()
+                                                            .toString(), etDTNo.getText().toString(),
+                                                    tvAcNo.getText().toString());
+                                            Toast.makeText(getApplicationContext(),
+                                                    "Update in Local DataBase",
+                                                    Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Error in Local Database", Toast.LENGTH_LONG).show();
+                                        }
+                                        if (Ocr.equalsIgnoreCase("Y")) {
+                                            callCameraIntentforimage();
+                                        } else {
+                                            callCameraIntent();
+                                        }
+                                    } else {
+                                        // Online Code
+                                        new updateDtNo().execute(etMobileNo.getText()
+                                                        .toString(), etDTNo.getText().toString(),
+                                                tvAcNo.getText().toString());
+                                    }
+                                } else {
+
+                                    if (Ocr.equalsIgnoreCase("Y")) {
+                                        callCameraIntentforimage();
+                                    } else {
+                                        callCameraIntent();
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            if (!etMeterNo.getText().toString().trim().isEmpty()) {
+
+                                long a = localDBHelper.saveMeterNo("Y", etMeterNo.getText().toString().trim(), tvAcNo.getText().toString());
+                                if (a > 0) {
+
+                                    if (!(etMobileNo.getText().toString().equals(stringMobileNo))
+                                            || !(etDTNo.getText().toString().equals(stringDtNo))) {
+                                        // This line will call due to some changes in editbox
+                                        if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                                            // Offline code
+                                            long c = localDBHelper.updateMru(etMobileNo.getText()
+                                                            .toString(), etDTNo.getText().toString(),
+                                                    tvAcNo.getText().toString(), "Y","","");
+                                            if (c > 0) {
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Update in Local DataBase",
+                                                        Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Error in Local Database",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                            if (Ocr.equalsIgnoreCase("Y")) {
+                                                callCameraIntentforimage();
+                                            } else {
+                                                callCameraIntent();
+                                            }
+                                        } else {
+                                            // Online Code
+                                            new updateDtNo().execute(etMobileNo.getText().toString(), etDTNo.getText().toString(), tvAcNo.getText().toString());
+                                        }
+                                    } else {
+
+                                        if (Ocr.equalsIgnoreCase("Y")) {
+                                            callCameraIntentforimage();
+                                        } else {
+                                            callCameraIntent();
+                                        }
+                                    }
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error in Inserting Meter Number",
+                                            Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Kindly Enter Valid Meter Number",
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                    }
+                }
+
+            } else {
+                if (reason.equalsIgnoreCase("") || reason.equalsIgnoreCase("0")) {
+                    Toast.makeText(ConsumerActivity4A11.this, "Please select Reason", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (!Utiilties.isOnline(ConsumerActivity4A11.this)) {
+                        Long i = localDBHelper.saveBillreason(reason, tvAcNo.getText().toString());
+                        if (i >= 0) {
+                            finish();
+                        } else {
+                            Toast.makeText(ConsumerActivity4A11.this, "Error in local database", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        new updatebillingreason().execute(tvConNo.getText().toString(), reason);
+                    }
+                }
+            }
+        });
+
+        // ListView Item Click Listener
+        dataList.setOnItemClickListener((parent, view, position, id) -> {
+            // TODO Auto-generated method stub
+
+            // ListView Clicked item value
+            String conId = ((TextView) view.findViewById(R.id.tv_con_id))
+                    .getText().toString();
+            for (MRUDetails mru : mruList) {
+                if (mru.get_CON_ID().equals(conId)) {
+                    scrollView.setVisibility(View.VISIBLE);
+                    lin_listview.setVisibility(View.GONE);
+                    tvAcNo.setText(mru.get_ACT_NO());
+                    tvConNo.setText(mru.get_CON_ID());
+                    tvMeterNo.setText(mru.get_METER_NO());
+                    tvConName.setText(mru.get_CNAME());
+                    tvAddress.setText(mru.get_Cfathername());
+                    tvCategory.setText(mru.get_CATEGORY());
+                    tvLoad.setText(mru.get_LOAD());
+                    etMobileNo.setText(mru.get_CONTACT_NUM().trim());
+                    etDTNo.setText(mru.get_DT_NO().trim());
+                    stringMobileNo = mru.get_CONTACT_NUM().trim();
+                    stringDtNo = mru.get_DT_NO().trim();
+                    IMAGE_NAME = mru.get_CON_ID() + ".jpg";
+                }
+            }
+
+        });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // find which radio button is selected
+                if (checkedId == R.id.yes) {
+                    //	Toast.makeText(getApplicationContext(), "choice: Yes", Toast.LENGTH_SHORT).show();
+                    lin_meterNo.setVisibility(View.GONE);
+                    isMeterNoCorrect = true;
+                } else if (checkedId == R.id.no) {
+                    //	Toast.makeText(getApplicationContext(), "choice: No", Toast.LENGTH_SHORT).show();
+                    lin_meterNo.setVisibility(View.VISIBLE);
+                    isMeterNoCorrect = false;
+                }
+            }
+        });
+        radioGroupbilling.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // find which radio button is selected
+                if (checkedId == R.id.yes_billing) {
+                    //	Toast.makeText(getApplicationContext(), "choice: Yes", Toast.LENGTH_SHORT).show();
+                    isbillinglayout.setVisibility(View.GONE);
+                    isbilling = true;
+                } else if (checkedId == R.id.no_billing) {
+                    //	Toast.makeText(getApplicationContext(), "choice: No", Toast.LENGTH_SHORT).show();
+                    isbillinglayout.setVisibility(View.VISIBLE);
+                    isbilling = false;
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Retrives the result returned from selecting image, by invoking the method
+     * <code>selectImageFromGallery()</code>
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //if request code is same we pass as argument in startActivityForResult
+        if (requestCode == 5001 && resultCode == Activity.RESULT_OK) {
+            if (data != null && data.hasExtra("METER_READING_STATUS")) {
+                // Data in extras
+                //  Bundle[{KWH_READING_DATA_TYPE=SCAN, KWH_TIMESTAMP=1603098477, KWH_READING_VALUE=09755, Max_Demand_READING_VALUE=00.00, METER_READING_STATUS=OK, LAT=25.6101481, LON=85.1280389, READINGS_MAP={"Max_Demand":{"scan_value":"00.00","timestamp":"1603098488"},"KWH":{"scan_value":"09755","timestamp":"1603098477"}}, CONSUMER_NO=21410032848, Max_Demand_TIMESTAMP=1603098488, REQ_READING_VALUES=[KWH, Max_Demand], START_TIMESTAMP=1603098451, Max_Demand_READING_DATA_TYPE=SCAN, ABNORMALITY=Everything is Ok}]
+                String latitude = data.getStringExtra("LAT");
+                String longitude = data.getStringExtra("LON");
+                String consumerNo = data.getStringExtra("CONSUMER_NO");
+                // String resVal = data.getStringExtra("KWH_READING_VALUE");
+                bundle.putString("readingstats", data.getStringExtra("METER_READING_STATUS"));
+                if (read_stats.equalsIgnoreCase("KVAH")) {
+                    bundle.putString("reading", data.getStringExtra("KVAH_READING_VALUE"));
+                } else {
+                    bundle.putString("reading", data.getStringExtra("KWH_READING_VALUE"));
+                }
+                bundle.putString("abnormility", data.getStringExtra("ABNORMALITY"));
+                String[] returnparam = data.getStringArrayExtra("REQ_READING_VALUES");
+                String resValmaxdemand = "0", resValpowerfactor = "0";
+                //Power_Factor_READING_VALUE=0.88, KWH_READING_VALUE=9535, Max_Demand_READING_VALUE=00.61,
+                if (Arrays.asList(returnparam).contains("Max_Demand")) {
+                    resValmaxdemand = data.getStringExtra("Max_Demand_READING_VALUE");
+                    //  intentdata.add(3,resValmaxdemand);
+                }
+                if (Arrays.asList(returnparam).contains("Power_Factor")) {
+                    resValpowerfactor = data.getStringExtra("Power_Factor_READING_VALUE");
+                    //  intentdata.add(4,resValpowerfactor);
+                }
+                bundle.putString("maxdemand", resValmaxdemand);
+                bundle.putString("PF", resValpowerfactor);
+                bundle.putString("ACCOUNT_NO", tvAcNo.getText()
+                        .toString().trim());
+                final String date = Utiilties.getDate(gps.getTime(), "dd/MM/yyyy");
+                if (tvConNo.getText().toString().equalsIgnoreCase(consumerNo)) {
+                    ClipData clipData = data.getClipData();
+                    if (clipData != null && clipData.getItemCount() > 0) {
+                        Uri smallImgUri = null, bigImgUri = null;
+                        ClipData.Item clipItem;
+                        Log.d("result", String.valueOf(clipData.getItemCount()));
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            clipItem = clipData.getItemAt(i);
+                            if (clipItem.getText() != null) {
+                                if ("SMALL_IMAGE".contentEquals(clipItem.getText())) {
+                                    smallImgUri = clipItem.getUri();
+                                } else if ("BIG_IMAGE".contentEquals(clipItem.getText())) {
+                                    bigImgUri = clipItem.getUri();
+                                }
+                            }
+                        }
+                        Bitmap bitmap = saveFile(smallImgUri == null ? bigImgUri : smallImgUri);
+                        if (bitmap != null) {
+                            // date = Utiilties.getDate(gps.getTime(), "dd/MM/yyyy");
+                            long c = localDBHelper.savePhoto(String.valueOf(latitude),
+                                    String.valueOf(longitude), myDir + "/"
+                                    , tvConNo.getText().toString()
+                                            .trim(), date,"","");
+                            if (c > 0) {
+                                if (isadddressupdated.equalsIgnoreCase("Y")) {
+                                    Intent intent = new Intent(getBaseContext(),
+                                            MeterreadingstatusactivityOcr.class);
+
+                                    //  intent.putExtra("FLAG", "3");
+                                    bundle.putString("FLAG", "3");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+                                } else if (Integer.parseInt(CommonPref.getUserDetails(ConsumerActivity4A11.this).get_distcode()) == 236) {
+                                    Intent intent = new Intent(getBaseContext(),
+                                            MeterreadingstatusactivityOcr.class);
+                                    bundle.putString("FLAG", "3");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(getBaseContext(),
+                                            MeterreadingstatusactivityOcr.class);
+                                    bundle.putString("FLAG", "3");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Error in Local Database", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        } else {
+                            long c = localDBHelper.savePhoto(latitude, longitude, myDir
+                                    + "/", tvConNo.getText().toString()
+                                    .trim(), date,"","");
+                            if (c > 0) {
+                                if (isadddressupdated.equalsIgnoreCase("Y")) {
+                                    Intent intent = new Intent(getBaseContext(),
+                                            MeterreadingstatusactivityOcr.class);
+                                    bundle.putString("FLAG", "3");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(getBaseContext(),
+                                            User_FirstHomeActivity.class);
+                                    bundle.putString("FLAG", "3");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                    finish();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Error in Local Database", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(ConsumerActivity4A11.this, "Consumer No Invalid", Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                Toast.makeText(ConsumerActivity4A11.this, "Invalid Returns", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+                Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
+                try {
+                    cropCapturedImage(takenPhotoUri);
+                } catch (ActivityNotFoundException aNFE) {
+                    //display an error message if user device doesn't support
+                    String errorMessage = "Sorry - your device doesn't support the crop action!";
+                    Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
+
+
+            }
+        }
+        else if (requestCode == 2 && resultCode == RESULT_OK) {
+            Bitmap bitmap = null;
+            try {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    bitmap = extras.getParcelable("data");
+                    saveBitmap(bitmap);
+                }else{
+                    try {
+                        bitmap = Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                        saveBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception ex) {
+                try {
+                    bitmap = Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    saveBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+public void saveBitmap(Bitmap bitmp){
+    try {
+        Uri uri= imageutils.saveImage(bitmp,this,CommonPref.getUserDetails(getApplicationContext())
+                .get_MRUNo(),tvConNo.getText().toString().trim(),"012015" );
+        SaveImage(uri.toString());
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+    public void AlertDialogForNoResultFound() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                ConsumerActivity4A11.this);
+        // Setting Dialog Title
+        alertDialog.setTitle("Result Not Found!!");
+        // Setting Dialog Message
+        alertDialog.setMessage("No Consumer Details had been found regarding your search.\n Please Try Again...");
+        // Setting Icon to Dialog
+        // alertDialog.setIcon(R.drawable.bulb_1);
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getBaseContext(),
+                                MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                    }
+                });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // do something on back.
+            if (mruList.size() > 1 && lin_listview.getVisibility() == View.GONE) {
+                loadMruList();
+
+            } else if (mruList.size() > 1
+                    && lin_listview.getVisibility() == View.VISIBLE) {
+                finish();
+            } else {
+                finish();
+            }
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+    public void loadMruList() {
+        scrollView.setVisibility(View.GONE);
+        lin_listview.setVisibility(View.VISIBLE);
+        try {
+            adapter = new ConsumerAdapter(ConsumerActivity4A11.this,
+                    R.layout.list_row_consumer, mruList);
+            dataList.setAdapter(adapter);
+
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), "Error in loading",
+                    Toast.LENGTH_SHORT).show();
+            //    Utiilties.writeIntoLog(Log.getStackTraceString(ex));
+        }
+    }
+
+    public void callCameraIntent() {
+        String isPendingBill = localDBHelper.getIsPendingBill(tvAcNo.getText().toString().trim());
+        if (!(isPendingBill.trim().equalsIgnoreCase("P") || isPendingBill.trim().equalsIgnoreCase("G"))) {
+            gps = new GPSTracker(ConsumerActivity4A11.this);
+            // check if GPS enabled
+            if (gps.canGetLocation()) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Create a File reference for future access
+                // String photoFileName = tvConNo.getText().toString().trim()+".jpg";
+                photoFile = getPhotoFileUri(photoFileName);
+                Uri fileProvider = FileProvider.getUriForFile(ConsumerActivity4A11.this, "com.nic.app.biharelectricitybilling.fileprovider", photoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, 1);
+                }
+            } else {
+                gps.showSettingsAlert();
+            }
+        } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            // Setting Dialog Title
+            alertDialog.setTitle("Alert!!!");
+            String msg = "";
+            if (isPendingBill.trim().equalsIgnoreCase("P")) {
+                msg = "The Bill has been already captured, please sync the data for Bill Generation";
+            } else if (isPendingBill.trim().equalsIgnoreCase("G")) {
+                msg = "The Bill has been already generated for choosen Consumer.";
+            }
+            // Setting Dialog Message
+            alertDialog.setMessage(msg);
+
+            // On pressing Settings button
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            // Showing Alert Message
+            alertDialog.show();
+        }
+    }
+
+    private class updateDtNo extends AsyncTask<String, Void, String> {
+        public updateDtNo() {
+        }
+
+        private final ProgressDialog dialog = new ProgressDialog(
+                ConsumerActivity4A11.this);
+        private final AlertDialog alertDialog = new AlertDialog.Builder(
+                ConsumerActivity4A11.this).create();
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setCanceledOnTouchOutside(false);
+            this.dialog
+                    .setMessage("Please wait. \n Updating DT and Mobile Number...");
+            this.dialog.setCancelable(false);
+            this.dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... param) {
+            UserDetails user = CommonPref
+                    .getUserDetails(getApplicationContext());
+            return WebServiceHelper.UpdateMRU(param[0], param[1],
+                    param[2], user);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (this.dialog.isShowing()) {
+                this.dialog.dismiss();
+                alertDialog.setTitle("Updating MRU..");
+                if (result != null) {
+                    alertDialog.setMessage("Synchronizing...");
+                    alertDialog.show();
+                    if (result.trim().equalsIgnoreCase("Update Successfull")) {
+                        long c = localDBHelper.updateMru(etMobileNo.getText()
+                                        .toString(), etDTNo.getText().toString(),
+                                tvAcNo.getText().toString(), "N","","");
+                        if (c > 0) {
+                            Toast.makeText(getApplicationContext(), result,
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Error in Local Database",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                } else {
+                    long c = localDBHelper.updateMru(etMobileNo.getText()
+                            .toString(), etDTNo.getText().toString(), tvAcNo
+                            .getText().toString(), "Y","","");
+                    Toast.makeText(getApplicationContext(), "Error in Network",
+                            Toast.LENGTH_LONG).show();
+                }
+
+                alertDialog.cancel();
+                if (Unmeter.equals("UM")) {
+                    getgps();
+                } else if (Unmeter.equals("MS")) {
+                    if (Ocr.equalsIgnoreCase("Y")) {
+                        callCameraIntentforimage();
+                    } else {
+                        callCameraIntent();
+                    }
+                }
+            }
+
+        }
+    }
+
+    private class updatebillingreason extends AsyncTask<String, Void, String> {
+
+        public updatebillingreason() {
+
+        }
+
+        private final ProgressDialog dialog = new ProgressDialog(
+                ConsumerActivity4A11.this);
+        private final AlertDialog alertDialog = new AlertDialog.Builder(
+                ConsumerActivity4A11.this).create();
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setCanceledOnTouchOutside(false);
+            this.dialog
+                    .setMessage("Please wait. \n Updating Reason Of not billing...");
+            this.dialog.setCancelable(false);
+            this.dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... param) {
+            UserDetails user = CommonPref
+                    .getUserDetails(getApplicationContext());
+            return WebServiceHelper.Updatereason(param[0], param[1], user);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (this.dialog.isShowing()) {
+                this.dialog.dismiss();
+                alertDialog.setTitle("Updating MRU..");
+                if (result != null) {
+                    alertDialog.setMessage("Synchronizing...");
+                    alertDialog.show();
+                    if (result.trim().contains("SUCCESS")) {
+                        long c = localDBHelper.updatereasonstatus(tvAcNo.getText().toString(), "N");
+                        if (c > 0) {
+                            Toast.makeText(getApplicationContext(), result,
+                                    Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Error in Local Database",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                } else {
+                    finish();
+                }
+
+                alertDialog.cancel();
+            }
+
+        }
+    }
+    public void cropCapturedImage(Uri picUri) {
+        //call the standard crop action intent
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m1 = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m1.invoke(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+            //indicate image type and Uri of image
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.setDataAndType(picUri, "image/*");
+          //  cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1.5);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 150);
+            cropIntent.putExtra("outputY", 100);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            //cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, 2);
+        }
+        private void SaveImage (String finalBitmap){
+            String success = "OK";
+            if (success.matches("OK")) {
+                // create class object
+                gps = new GPSTracker(ConsumerActivity4A11.this);
+                double latitude = 0.0;
+                double longitude = 0.0;
+                long dateTime = 0;
+                // check if GPS enabled
+                if (gps.canGetLocation()) {
+                    latitude = gps.getLatitude();
+                    longitude = gps.getLongitude();
+                    dateTime = gps.getTime();
+                    String date = Utiilties.getDate(dateTime, "dd/MM/yyyy");
+                    if (latitude > 0.0 && longitude > 0.0) {
+                        long c = localDBHelper.savePhoto(String.valueOf(latitude), String.valueOf(longitude), finalBitmap, tvConNo.getText().toString()
+                                .trim(), date,"","");
+                        if (c > 0) {
+                            if (isadddressupdated.equalsIgnoreCase("Y")) {
+                                Intent intent = new Intent(getBaseContext(),
+                                        MeterReadingStatusActivity.class);
+                                intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("FLAG", "0");
+                                startActivity(intent);
+                                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                finish();
+                            } else if (Integer.parseInt(CommonPref.getUserDetails(ConsumerActivity4A11.this).get_distcode()) == 236) {
+                                Intent intent = new Intent(getBaseContext(),
+                                        MeterReadingStatusActivity.class);
+                                intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("FLAG", "0");
+                                startActivity(intent);
+                                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(getBaseContext(),
+                                        User_FirstHomeActivity.class);
+                                intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("CON_ID", tvConNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("CON_NAME", tvConName.getText()
+                                        .toString().trim());
+                                intent.putExtra("FLAG", "0");
+                                startActivity(intent);
+                                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                finish();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Error in Local Database", Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    } else {
+                        long c = localDBHelper.savePhoto("9999", "9999", finalBitmap, tvConNo.getText().toString()
+                                .trim(), date,"","");
+                        if (c > 0) {
+                            if (isadddressupdated.equalsIgnoreCase("Y")) {
+                                Intent intent = new Intent(getBaseContext(),
+                                        MeterReadingStatusActivity.class);
+                                intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("FLAG", "0");
+                                startActivity(intent);
+                                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(getBaseContext(),
+                                        User_FirstHomeActivity.class);
+                                intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("CON_ID", tvConNo.getText()
+                                        .toString().trim());
+                                intent.putExtra("CON_NAME", tvConName.getText()
+                                        .toString().trim());
+                                intent.putExtra("FLAG", "0");
+                                startActivity(intent);
+                                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                                finish();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Error in Local Database", Toast.LENGTH_LONG)
+                                    .show();
+
+                        }
+                    }
+
+                } else {
+                    gps.showSettingsAlert();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), success, Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+        public void getgps () {
+            // create class object
+            gps = new GPSTracker(ConsumerActivity4A11.this);
+            double latitude = 0.0;
+            double longitude = 0.0;
+            long dateTime = 0;
+            // check if GPS enabled
+            if (gps.canGetLocation()) {
+
+                latitude = gps.getLatitude();
+                longitude = gps.getLongitude();
+                dateTime = gps.getTime();
+                String date = Utiilties.getDate(dateTime, "dd/MM/yyyy");
+                if (latitude > 0.0 && longitude > 0.0) {
+
+                    long c = localDBHelper.savePhoto(String.valueOf(latitude),
+                            String.valueOf(longitude), "", tvConNo.getText().toString()
+                                    .trim(), date,"","");
+                    if (c > 0) {
+                        if (isadddressupdated.equalsIgnoreCase("Y")) {
+                            Intent intent = new Intent(getBaseContext(),
+                                    MeterReadingStatusActivity.class);
+                            intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("FLAG", "0");
+                            startActivity(intent);
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(getBaseContext(),
+                                    User_FirstHomeActivity.class);
+                            intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("CON_ID", tvConNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("CON_NAME", tvConName.getText()
+                                    .toString().trim());
+                            intent.putExtra("FLAG", "0");
+                            startActivity(intent);
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Error in Local Database", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                } else {
+                    long c = localDBHelper.savePhoto(String.valueOf("9999"),
+                            String.valueOf("9999"), "", tvConNo.getText().toString()
+                                    .trim(), date,"","");
+                    if (c > 0) {
+                        if (isadddressupdated.equalsIgnoreCase("Y")) {
+                            Intent intent = new Intent(getBaseContext(),
+                                    MeterReadingStatusActivity.class);
+                            intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("FLAG", "0");
+                            startActivity(intent);
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(getBaseContext(),
+                                    User_FirstHomeActivity.class);
+                            intent.putExtra("ACCOUNT_NO", tvAcNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("FLAG", "0");
+                            intent.putExtra("CON_ID", tvConNo.getText()
+                                    .toString().trim());
+                            intent.putExtra("CON_NAME", tvConName.getText()
+                                    .toString().trim());
+                            startActivity(intent);
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Error in Local Database", Toast.LENGTH_LONG)
+                                .show();
+                    }
+
+                }
+            } else {
+
+                gps.showSettingsAlert();
+            }
+        }
+
+        public Boolean isvalidmobileno (String mobno){
+            Pattern mobileno = Pattern.compile("^(((\\+?\\(91\\))|0|((00|\\+)?91))-?)?[6-9]\\d{9}$");
+            return mobileno.matcher(mobno).matches();
+        }
+
+        @Override
+        protected void onResume () {
+            MARSHMALLOW_PERMISSION = new MarshmallowPermission(ConsumerActivity4A11.this, Manifest.permission.CAMERA);
+            MARSHMALLOW_PERMISSION = new MarshmallowPermission(ConsumerActivity4A11.this, Manifest.permission.ACCESS_FINE_LOCATION);
+            super.onResume();
+        }
+
+        Bitmap ShrinkBitmap (Bitmap file,int width, int height){
+            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+            bmpFactoryOptions.inJustDecodeBounds = true;
+            Bitmap bitmap = file;
+            int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
+            int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
+            if (heightRatio > 1 || widthRatio > 1) {
+                if (heightRatio > widthRatio) {
+                    bmpFactoryOptions.inSampleSize = heightRatio;
+                } else {
+                    bmpFactoryOptions.inSampleSize = widthRatio;
+                }
+            }
+
+            bmpFactoryOptions.inJustDecodeBounds = false;
+            // bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] imageInByte = stream.toByteArray();
+            //this gives the size of the compressed image in kb
+            long lengthbmp = imageInByte.length / 1024;
+
+            try {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream("/sdcard/mediaAppPhotos/compressed_new.jpg"));
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        public Bitmap getResizedBitmap (Bitmap image,int maxSize){
+            int width = image.getWidth();
+            int height = image.getHeight();
+            float bitmapRatio = (float) width / (float) height;
+            if (bitmapRatio > 1) {
+                width = maxSize;
+                height = (int) (width / bitmapRatio);
+            } else {
+                height = maxSize;
+                width = (int) (height * bitmapRatio);
+            }
+            return Bitmap.createScaledBitmap(image, width, height, true);
+        }
+
+        public void callCameraIntentforimage () {
+            String isPendingBill = localDBHelper.getIsPendingBill(tvAcNo.getText().toString().trim());
+            if (!(isPendingBill.trim().equalsIgnoreCase("P") || isPendingBill.trim().equalsIgnoreCase("G"))) {
+                gps = new GPSTracker(ConsumerActivity4A11.this);
+                // check if GPS enabled
+                if (gps.canGetLocation()) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("bsmrscan/meter");
+                    intent.setPackage("in.coral.met");
+                    intent.putExtra("BOARD_CODE", "SBPDCL");
+                    intent.putExtra("SCAN_TYPE", read_stats);
+                    intent.putExtra("ACCESS_KEY", "Gq1fu9Vbip_sbpdcl");
+                    final JSONObject prevReadings = new JSONObject();  //import org.json.JSONObject;
+                    try {
+                        prevReadings.put(read_stats, Previous_read);
+                        prevReadings.put("Max_Demand", REC_DEEMAND);
+                        prevReadings.put("PF", POWER_FACTOR);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtra("REQ_READING_VALUES", reqread.toArray(paramarray));
+                    intent.putExtra("PREV_READING", Previous_read);
+                    intent.putExtra("PREV_READING_VALUES", prevReadings.toString());
+                    intent.putExtra("PREV_READING_DATE", Prv_read_Date);
+                    intent.putExtra("CONSUMER_NO", tvConNo.getText().toString().trim());
+                    intent.putExtra("METER_NO", Meter_no);
+                    intent.putExtra("PHASE", Phase);
+                    intent.putExtra("CATEGORY", category);
+                    intent.putExtra("METER_READER_ID", CommonPref.getUserDetails(ConsumerActivity4A11.this).get_UserID());
+                    intent.putExtra("AREA_CODE", CommonPref.getUserDetails(ConsumerActivity4A11.this).get_MRUNo());
+                    intent.putExtra("SECTION_CODE", Sec_div_code);
+                    intent.putExtra("SUB_DIVISION_CODE", Sec_div_code.toString().substring(0, 4));
+                    intent.putExtra("ACTIVITY_TYPE", "BILLING");
+                    intent.putExtra("CONSUMER_NAME", tvConName.getText().toString().trim());
+                    Log.e("", "BOARD_CODE :" + "SBPDCL" + "SCAN_TYPE :" + read_stats + "REQ_READING_VALUES :" + reqread.toArray(paramarray)
+                            + "PREV_READING :" + Previous_read + "CONSUMER_NO :" + tvConNo.getText().toString().trim() + "METER_NO :" + Meter_no + "PHASE :" + Phase);
+                    Log.e("inent extras value", "" + intent.getExtras());
+                    PackageManager packageManager = getPackageManager();
+                    List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                    boolean isIntentSafe = activities.size() > 0;
+                    if (isIntentSafe) {
+                        startActivityForResult(intent, 5001);
+                    } else {
+                        Toast.makeText(ConsumerActivity4A11.this, "Meter Reading App Not Found!", Toast.LENGTH_SHORT).show();
+
+                        // Uncomment below to navigate user to install the app from playstore
+                        // final String appPackageName = "in.coral.met";
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://electricity.bharatsmr.com/mrapp")));
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                        } catch (ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://electricity.bharatsmr.com/mrapp")));
+                            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_down);
+                        }
+                    }
+
+
+                } else {
+                    gps.showSettingsAlert();
+                }
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle("Alert!!!");
+                String msg = "";
+                if (isPendingBill.trim().equalsIgnoreCase("P")) {
+                    msg = "The Bill has been already captured, please sync the data for Bill Generation";
+                } else if (isPendingBill.trim().equalsIgnoreCase("G")) {
+                    msg = "The Bill has been already generated for choosen Consumer.";
+                }
+                // Setting Dialog Message
+                alertDialog.setMessage(msg);
+
+                // On pressing Settings button
+                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        }
+        Bitmap saveFile (Uri sourceuri){
+            ParcelFileDescriptor inputPFD;
+            File root = getFilesDir();
+            //  File myDir = new File(root, "/scan_images/");
+            File myDir1 = new File(root, CROP_IMAGE_FILE_PATH1);
+            if (!myDir1.exists()) {
+                myDir1.mkdirs();
+            }
+            String sourceFilename = sourceuri.getPath();
+            // get file name from path
+            sourceFilename = tvConNo.getText().toString().trim() + ".jpg";
+            // sourceFilename = sourceFilename.substring(sourceFilename.lastIndexOf('/'));
+            myDir = new File(myDir1, sourceFilename);
+
+            /*
+             * Try to open the file for "read" access using the
+             * returned URI. If the file isn't found, write to the
+             * error log and return.
+             */
+            try {
+                /*
+                 * Get the content resolver instance for this context, and use it
+                 * to get a ParcelFileDescriptor for the file.
+                 */
+                inputPFD = getContentResolver().openFileDescriptor(sourceuri, "r");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Log.e("MainActivity", "File not found.");
+                return null;
+            }
+            // Get a regular file descriptor for the file
+            FileDescriptor fd = inputPFD.getFileDescriptor();
+
+
+            BufferedInputStream bis = null;
+            BufferedOutputStream bos = null;
+
+            try {
+                bis = new BufferedInputStream(new FileInputStream(fd));
+                bos = new BufferedOutputStream(new FileOutputStream(myDir, false));
+                byte[] buf = new byte[1024];
+                bis.read(buf);
+                do {
+                    bos.write(buf);
+                } while (bis.read(buf) != -1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bis != null) bis.close();
+                    if (bos != null) bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return getBitmapFromPath(myDir.getAbsolutePath());
+        }
+        public static Bitmap getBitmapFromPath (String path){
+            Bitmap scaleImage = null;
+            try {
+                FileInputStream fi = new FileInputStream(path);
+                return BitmapFactory.decodeStream(fi);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return scaleImage;
+        }
+        public File getPhotoFileUri (String fileName){
+            // Get safe storage directory for photos
+            // Use `getExternalFilesDir` on Context to access package-specific directories.
+            // This way, we don't need to request external read/write runtime permissions.
+            File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+                Log.d(APP_TAG, "failed to create directory");
+            }
+            // Return the file target for the photo based on filename
+            return new File(mediaStorageDir.getPath() + File.separator + fileName);
+        }
+
+  /*  private fun startCameraWithUri() {
+        context?.let { ctx ->
+                CropImage.activity(photoUri)
+                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
+                        .setAspectRatio(1, 1)
+                        .setMaxZoom(4)
+                        .setAutoZoomEnabled(true)
+                        .setMultiTouchEnabled(true)
+                        .setCenterMoveEnabled(true)
+                        .setShowCropOverlay(true)
+                        .setAllowFlipping(true)
+                        .setSnapRadius(3f)
+                        .setTouchRadius(48f)
+                        .setInitialCropWindowPaddingRatio(0.1f)
+                        .setBorderLineThickness(3f)
+                        .setBorderLineColor(Color.argb(170, 255, 255, 255))
+                        .setBorderCornerThickness(2f)
+                        .setBorderCornerOffset(5f)
+                        .setBorderCornerLength(14f)
+                        .setBorderCornerColor(WHITE)
+                        .setGuidelinesThickness(1f)
+                        .setGuidelinesColor(android.R.color.white)
+                        .setBackgroundColor(Color.argb(119, 0, 0, 0))
+                        .setMinCropWindowSize(24, 24)
+                        .setMinCropResultSize(20, 20)
+                        .setMaxCropResultSize(99999, 99999)
+                        .setActivityTitle("")
+                        .setActivityMenuIconColor(0)
+                        .setOutputUri(null)
+                        .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .setOutputCompressQuality(90)
+                        .setRequestedSize(0, 0)
+                        .setRequestedSize(0, 0, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
+                        .setInitialCropWindowRectangle(null)
+                        .setInitialRotation(90)
+                        .setAllowCounterRotation(false)
+                        .setFlipHorizontally(false)
+                        .setFlipVertically(false)
+                        .setCropMenuCropButtonTitle(null)
+                        .setCropMenuCropButtonIcon(0)
+                        .setAllowRotation(true)
+                        .setNoOutputImage(false)
+                        .setFixAspectRatio(false)
+                        .start(ctx, this);
+        }
+    }*/
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, photoFileName, null);
+        return Uri.parse(path);
+    }
+
+    }

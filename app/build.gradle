@@ -1,0 +1,116 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'kotlin-android'
+android {
+    compileSdkVersion 33
+    useLibrary 'org.apache.http.legacy'
+
+    defaultConfig {
+        applicationId "com.nic.app.biharelectricitybilling"
+        minSdkVersion 22
+        targetSdkVersion 33
+        versionCode 11
+        versionName "11.5"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a","arm64-v8a"//,"x86","x86_64"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            universalApk true
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            version "3.10.2"
+        }
+    }
+    dexOptions {
+        jumboMode true
+    }
+
+    namespace 'com.nic.app.biharelectricitybilling'
+}
+
+configurations {
+    all {
+        exclude group: "jpos.JposConst", module: "jetified-AndroidLib_1070"
+        exclude group: "jpos.JposException", module: "jetified-AndroidLib_1070"
+        exclude group: "jpos.POSPrinterConst", module: "jetified-AndroidLib_1070"
+    }
+}
+dependencies {
+    api fileTree( include: ['*.jar', '*.aar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    //epson start
+    implementation files('libs/ePOS2.jar')
+    implementation files('libs/ePOSEasySelect.jar')
+    //epson end
+
+    //Analogics start
+    implementation files('libs/AnalogicsDecrypter.jar')
+    implementation files('libs/AnalogicsMultilingual_BT_Printer_2T_API_1_6.jar')
+    implementation files('libs/droidText.0.2.jar')
+    //Analogics end
+
+    //TVS start
+    implementation files('libs/core.jar')
+    implementation files('libs/Android_SDK_ESC_V1.01.17.01PRO.jar')
+    implementation files('libs/xerces.jar')
+    implementation files('libs/icu4j-58_1.jar')
+    implementation files('libs/sun.misc.BASE64Decoder.jar')
+    implementation files('libs/common-lang3.jar')
+    implementation files('libs/org-apache-commons-codec.jar')
+    //TVS End
+
+    //other libs start
+    implementation files('libs/ksoap2-android-assembly-3.0.0-RC.4-jar-with-dependencies.jar')
+    implementation files('libs/opencv_library-2.4.3.jar')
+    //other libs end
+
+    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+
+
+
+    //implementation 'com.wonderkiln:camerakit:0.13.1'
+    //implementation 'com.nabinbhandari.android:permissions:3.7'
+    //implementation 'com.github.CanHub:Android-Image-Cropper:1.0'
+
+
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    testImplementation 'android.arch.persistence.room:testing:1.1.1'
+    //implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+
+}

@@ -1,0 +1,179 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".ui.ConsumerActivity" >
+
+
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="5dp" >
+    </FrameLayout>
+    
+    
+        <Button
+        android:id="@+id/btnCamType"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+         android:layout_alignParentTop="true"
+            android:visibility="visible"
+         android:background="@drawable/ic_action_cam"
+           />
+        
+
+    <LinearLayout
+        android:id="@+id/Rel_Layout_Lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:visibility="invisible"
+        android:layout_below="@+id/btnCamType"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/textLatLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Latitude :"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tvLat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Lat"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Rel_Layout_Lon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Rel_Layout_Lat"
+         android:visibility="invisible"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/textLonLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Longitude"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tvLon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Lon"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rel_accuracy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Rel_Layout_Lon"
+         android:visibility="invisible"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Accuracy : "
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAcuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="accuracy"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Rel_Layout_Timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rel_accuracy"
+        android:layout_marginTop="10dp"
+        android:visibility="visible"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textTimerLabel"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="Time Elapsed"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FF0000"
+            android:textStyle="bold|italic" />
+
+        <Chronometer
+            android:id="@+id/chronometer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format="%s"
+            android:text="00"
+            android:textColor="#00FF00"
+            android:textSize="40sp" />
+    </LinearLayout>
+
+
+    <include
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        layout="@layout/footer" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttonshape"
+        android:layout_alignBottom="@+id/camera_preview"
+        android:layout_centerHorizontal="true">
+        <ProgressBar
+            android:id="@+id/progress_finding_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:background="@android:color/transparent"/>
+        <Button
+            android:id="@+id/btnCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCaptureClick"
+            android:padding="10dp"
+            android:textColor="#FF0000"
+            android:background="@android:color/transparent"
+            android:text=" Wating for GPS "
+           />
+    </LinearLayout>
+</RelativeLayout>

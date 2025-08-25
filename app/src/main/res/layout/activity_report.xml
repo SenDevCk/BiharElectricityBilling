@@ -1,0 +1,156 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#33B5E5"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/pole1"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".LoginActivity" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
+
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_unbilled"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:text="Unbilled Consumer list"
+                android:textColor="#FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+            <Button
+                android:id="@+id/btn_unbilled_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:text="Unbilled Consumer list(Datewise)"
+                android:textColor="#FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+            <Button
+                android:id="@+id/btn_outsort"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:text="OutSort Consumer List"
+                android:textColor="#FFFFFF" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <Button
+                android:id="@+id/btn_untrace"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:text="Untraced Consumer List"
+                android:textColor="#FFFFFF" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <Button
+                android:id="@+id/btn_network_failure"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:text="Consumer List ( Network Failure )"
+                android:textColor="#FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+            <Button
+                android:id="@+id/btn_unbilled_print"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/back12"
+                android:visibility="gone"
+
+                android:text="UnBilled Consumer List ( Print )"
+                android:textColor="#FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+
+                android:layout_marginRight="5dp" />
+            <Button
+                android:id="@+id/btn_summary_print"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                android:background="@drawable/back12"
+                android:text="Billed Summary ( Print )"
+                android:textColor="#FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+
+                android:layout_marginRight="5dp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        layout="@layout/footer" />
+
+</RelativeLayout>

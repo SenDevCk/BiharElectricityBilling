@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.CLEAR_APP_CACHE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="com.datainfosys.bpdcl.provider.READ_WRITE" />
+    <uses-permission android:name="in.coral.met.provider.READ_WRITE_BILL" />
+    <uses-permission android:name="com.sujanix.truereadlink.provider.READ_WRITE_BILL" />
+
+    <uses-feature android:name="android.bluetooth" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"  android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+
+    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+
+    <queries>
+        <package android:name="in.coral.met" />
+        <package android:name="com.sujanix.truereadlink" />
+        <package android:name="com.wfm" />
+        <package android:name="com.bih.nic.e_wallet" />
+        <!-- <package android:name="com.example.demoapp" /> -->
+        <package android:name="com.datainfosys.bpdcl" />
+
+        <intent>
+            <action
+                android:name="com.android.camera.action.CROP"
+                android:grantUriPermissions="true" />
+        </intent>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/ic_launcher"
+        android:installLocation="internalOnly"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".ui.KWHtoKVAH"
+            android:exported="false" />
+        <activity android:name=".ui.Act_Print_Bill" />
+        <activity android:name=".ui.TvsPrinterSetupActivity" />
+        <activity
+            android:name=".ui.SplashActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <uses-library
+            android:name="android.test.runner"
+            android:required="false" />
+
+        <activity
+            android:name=".ui.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light">
+            <intent-filter>
+                <action android:name="com.grid.gmr" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.BillingHomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.User_FirstHomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.SearchAccountActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivity4A10"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivity4A11"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivity4A11specific"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.SyncHomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.MissingConSearchActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.MissingConsumerActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.SetUpActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.MeterReadingStatusActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.PrintActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.PaymentSurveyDeatils"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name="print.PrintMainActivity"
+            android:label="@string/app_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
+        <activity
+            android:name="print.DiscoveryActivity"
+            android:label="@string/app_title"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".ui.ConfigurePrinter"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.AnalogicsPrinterSetup"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/> <!-- landscape -->
+        <activity
+            android:name=".ui.SummaryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ReportActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/> <!-- landscape -->
+        <activity
+            android:name=".ui.UnBilledActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/> <!-- landscape -->
+        <activity
+            android:name=".ui.UnBilledActivityDate"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/> <!-- landscape -->
+        <activity
+            android:name=".ui.UntracedActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/> <!-- landscape -->
+        <activity
+            android:name=".ui.OutSortActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.NetworkFailureActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.MeterReadingForMissingActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivity4A11new"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.DeviceListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.SynPendingData"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.SynPendingReasondata"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.PrintHomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.AplConsumerListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.ConsumerActivityForApl"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.MeterReadingStatusActivityForApl"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".ui.CameraActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".ui.MeterreadingstatusactivityOcr"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".Tvsprinter.Activity_DeviceList"
+            android:largeHeap="true"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+             />
+        <activity
+            android:name=".ui.SurveyActivity"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".ui.SurveyDeatils"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light" />
+        <activity
+            android:name=".ui.SurveyPendingData"
+            android:largeHeap="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="12451000"
+            tools:replace="android:value" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="YOUR_KEY_ID" />
+
+        <provider
+            android:name=".contentProvider.BillingIMEIProvider"
+            android:authorities="com.nic.app.biharelectricitybilling.contentProvider.BillingIMEIProvider"
+            android:enabled="true"
+            android:exported="true"
+            android:grantUriPermissions="true"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.nic.app.biharelectricitybilling.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
+
+    </application>
+
+</manifest>

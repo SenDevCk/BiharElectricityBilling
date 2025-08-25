@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/pole"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+               <TextView
+                   android:id="@+id/no_of_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@android:color/darker_gray"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mruName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#A85221"
+                    android:textStyle="bold" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/scroll_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TableLayout
+                        android:id="@+id/tableLayoutrep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp" >
+
+                        <TableRow
+                            android:id="@+id/tableRow1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="1dp"
+                            android:gravity="center_horizontal" >
+
+                            <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_span="6"
+                                android:background="@drawable/cell_shape"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="CATEGORY WISE SUMMARY REPORT"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18dp"
+                                android:textStyle="bold" >
+                            </TextView>
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tbleRow2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="1dp" >
+
+                            <TextView
+                                android:id="@+id/TxtView21"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  CATEGORY  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/TxtView22"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  TOTAL CONNECTION  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/TxtView23"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  BILLED  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/TxtView24"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  UNITS  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+                            <TextView
+                                android:id="@+id/TxtView25"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  BILLED AMOUNT  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+                            <TextView
+                                android:id="@+id/TxtView26"
+                                android:background="@drawable/cell_shape1"
+                                android:gravity="center"
+                                android:padding="5dp"
+                                android:text="  PENDING  "
+                                android:textColor="#FFFFFF"
+                                android:textSize="10dp"
+                                android:textStyle="bold"
+                                android:typeface="serif" >
+                            </TextView>
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

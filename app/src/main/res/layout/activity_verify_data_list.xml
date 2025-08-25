@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#33B5E5"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#7B4D8A"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        tools:context=".LoginActivity"
+        tools:ignore="SpeakableTextPresentCheck">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/data_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <Button
+            android:id="@+id/syncronize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:text="Syncronize Data"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#43D305"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:weightSum="1">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_accountnodata"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
+                android:gravity="center"
+                android:hint="Enter A/C Number"
+                android:inputType="textCapCharacters"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                tools:ignore="TouchTargetSizeCheck">
+
+
+            </AutoCompleteTextView>
+
+            <Button
+                android:id="@+id/bt_search1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:text="Search"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+    <include
+        android:id="@+id/footer"
+        layout="@layout/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>
